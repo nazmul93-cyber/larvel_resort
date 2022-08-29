@@ -28,6 +28,7 @@ class UserController extends Controller
         $formFields = request()->validate([
             'name' => ['required', 'min:3'],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
+            'role' => ['required'],
             'password' => ['required', 'confirmed', 'min:6'],
 
         ]);
@@ -75,9 +76,14 @@ class UserController extends Controller
 
     public function destroy(User $admin)
     {
-        // authorization not used intentionally
-        $admin->delete();
-        return redirect('/admins')->with('message', "Admin info deleted successfully");
+        // super admin 
+        if (auth()->user()->role == 'super') {
+            $admin->delete();
+            return redirect('/admins')->with('message', "Admin info deleted successfully");
+        } else {
+            abort(403, 'Unauthorized Action');
+        }
+       
     }
 
     public function logout()

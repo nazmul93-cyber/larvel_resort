@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Resort;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,7 +14,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(10)->create();
-        // \App\Models\Admin::factory()->create();
+        \App\Models\User::factory(5)->create();
+        Resort::factory(100)->create();
+       
     }
 }

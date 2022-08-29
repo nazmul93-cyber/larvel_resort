@@ -1,12 +1,14 @@
 <x-admin_layout>
+    
     <div class="container-fluid">
-        <form method="POST" action="/admins/store">
-
+        <a class="btn btn-info my-2" href="/admins"><i class="fa-solid fa-backward-step mr-2"></i>Back</a>
+        <form method="POST" action="/admins/{{ $admin->id }}">
             @csrf
+            @method('put')
 
             <div class="form-group">
                 <label for="exampleInputText1">Full Name</label>
-                <input name="name" type="text" class="form-control" id="exampleInputText1" value="{{ old('name') }}">
+                <input name="name" type="text" class="form-control" id="exampleInputText1" value="{{ $admin->name }}">
                 @error('name')
                     <p class="text-danger text font-italic font-weight-light">{{ $message }}</p>
                 @enderror
@@ -15,25 +17,11 @@
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
                 <input name="email" type="email" class="form-control" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" value="{{ old('email') }}">
+                    aria-describedby="emailHelp" value="{{ $admin->email }}">
                 @error('email')
                     <p class="text-danger text font-italic font-weight-light">{{ $message }}</p>
                 @enderror
             </div>
-
-            <div class="form-group">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">Roles</label>
-                </div>
-                <select name="role" class="custom-select" id="inputGroupSelect01">
-                  <option disabled selected>Choose...</option>
-                  <option value="super">Super</option>
-                  <option value="admin">Admin</option>
-                </select>
-                @error('role')
-                <p class="text-danger text font-italic font-weight-light">{{ $message }}</p>
-            @enderror
-              </div>
 
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
@@ -48,7 +36,7 @@
                 <input name="password_confirmation" type="password" class="form-control" id="exampleInputPassword1">
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Update</button>
         </form>
     </div>
 </x-admin_layout>
