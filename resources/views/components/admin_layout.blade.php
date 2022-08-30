@@ -39,7 +39,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/bookings">Bookings</a>
                 </li>
-                
+
             </ul>
         </div>
     </nav>
@@ -56,6 +56,12 @@
     <main>
         {{ $slot }}
     </main>
+
+    {{-- footer --}}
+    <footer class="w-100 h-24 mt-24 text-center font-italic font-weight-light">
+        <p class="ml-2">Copyright &copy; 2022, All Rights reserved</p>
+    </footer>
+
 
     {{-- bootstrap js --}}
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

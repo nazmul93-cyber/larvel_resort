@@ -44,6 +44,8 @@ Route::post('/resorts/store', [ResortController::class, 'store'])->middleware('a
 Route::get('/resorts/{resort}/edit', [ResortController::class, 'edit'])->middleware('auth');
 Route::put('/resorts/{resort}', [ResortController::class, 'update'])->middleware('auth');
 Route::delete('/resorts/{resort}', [ResortController::class, 'destroy'])->middleware('auth');
+Route::get('/resorts/{resort}', [ResortController::class, 'show'])->middleware('auth');     // show single resort 
+
 // bookings
 Route::get('/bookings', [BookingController::class, 'index'])->middleware('auth');
 Route::get('/bookings/create', [BookingController::class, 'create'])->middleware('auth');

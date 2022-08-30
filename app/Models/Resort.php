@@ -9,12 +9,20 @@ class Resort extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);
     }
 
     // sorting  by price, availability, room numbers
+    public function scopeOrderSort($query, $order)
+    {
+        if ($order) {
+            $query->orderBy('id', request('order'));
+        }
+    }
     public function scopePriceSort($query, $price)
     {
         if ($price) {

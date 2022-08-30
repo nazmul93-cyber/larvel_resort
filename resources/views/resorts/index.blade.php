@@ -1,7 +1,7 @@
 <x-admin_layout>
 
     <div class="d-flex">
-        <a class="btn btn-success mx-2 my-4 px-4 py-2" href="/admins/create" role="button"><i
+        <a class="btn btn-success mx-2 my-4 px-4 py-2" href="/resorts/create" role="button"><i
                 class="fa-solid fa-plus mr-2"></i>New Resort</a>
 
         {{-- searching --}}
@@ -13,6 +13,22 @@
 
     {{-- sorting and pagination --}}
     <div class="d-flex">
+
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Select Order</h5>
+                <form method='GET' action='/resorts'>
+                    <div class="form-group">
+                        <select name="order" class="form-control" id="exampleFormControlSelect1">
+                            <option selected disabled>choose...</option>
+                            <option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-info">Order</button>
+                </form>
+            </div>
+        </div>
 
         <div class="card" style="width: 18rem;">
             <div class="card-body">
@@ -61,7 +77,7 @@
                 </form>
             </div>
         </div>
-    
+
         <div class="card" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card-title">Select Data Per Page</h5>
@@ -99,6 +115,7 @@
         </div>
     </div>
 
+    {{-- resorts data --}}
     <table class="table table-striped">
         <thead>
             <tr>
@@ -108,6 +125,7 @@
                 <th scope="col">Description</th>
                 <th scope="col">Tags</th>
                 <th scope="col">Company</th>
+                <th scope="col">Location</th>
                 <th scope="col">Website</th>
                 <th scope="col">Email</th>
                 <th scope="col">Available From</th>
@@ -115,7 +133,8 @@
                 <th scope="col">Room Numbers</th>
                 <th scope="col">Room Price</th>
                 <th scope="col">Room Capacity</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Action</th>
+                {{-- <th scope="col">Actions</th> --}}
             </tr>
         </thead>
         <tbody>
@@ -124,40 +143,49 @@
                 <h1> Sorry, No Data Found </h1>
             @else
                 @foreach ($resorts as $resort)
-                    <tr>
-                        <th scope="row">{{ $resort->id }}</th>
-                        <td>{{ $resort->Logo ?? null }}</td>
-                        <td>{{ Str::limit($resort->title, 20) }}</td>
-                        <td>{{ Str::limit($resort->description, 20) }}</td>
-                        <td>{{ $resort->tags }}</td>
-                        <td>{{ $resort->company }}</td>
-                        <td>{{ $resort->website }}</td>
-                        <td>{{ $resort->email }}</td>
-                        <td>{{ $resort->available_from }}</td>
-                        <td>{{ $resort->available_till }}</td>
-                        <td>{{ $resort->room_numbers }}</td>
-                        <td>{{ $resort->room_price }}</td>
-                        <td>{{ $resort->room_capacity }}</td>
-                        <td class="d-flex">
-                            <a href="/admins/{{ $resort->id }}/edit"><i
+                   
+                        <tr>
+                            <th scope="row">{{ $resort->id }}</th>
+                            <td>
+                                <img class="w-100 h-100"
+                                    src="{{ $resort->logo ? asset("storage/$resort->logo") : asset('images/resort/default_image.jpg') }}"
+                                    alt="">
+                            </td>
+                            <td>{{ Str::limit($resort->title, 20) }}</td>
+                            <td>{{ Str::limit($resort->description, 20) }}</td>
+                            <td>{{ $resort->tags }}</td>
+                            <td>{{ $resort->company }}</td>
+                            <td>{{ $resort->location }}</td>
+                            <td>{{ $resort->website }}</td>
+                            <td>{{ $resort->email }}</td>
+                            <td>{{ $resort->available_from }}</td>
+                            <td>{{ $resort->available_till }}</td>
+                            <td>{{ $resort->room_numbers }}</td>
+                            <td>{{ $resort->room_price }}</td>
+                            <td>{{ $resort->room_capacity }}</td>
+                            {{-- <td class="d-flex">
+                            <a href="/resorts/{{ $resort->id }}/edit"><i
                                     class="fa-solid fa-pen-to-square text-info"></i></a>
                             <form onsubmit="return confirm('Are you sure?');" class="d-inline" method="POST"
-                                action="/admins/{{ $resort->id }}">
+                                action="/resorts/{{ $resort->id }}">
                                 @csrf
                                 @method('DELETE')
                                 <button class="text-danger btn btn-light">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </form>
-
-                        </td>
-                    </tr>
+                        </td> --}}
+                        <td><a class="btn btn-info" href="/resorts/{{ $resort->id }} ">Manage</a></td>
+                        </tr>
+                    
                 @endforeach
             @endif
         </tbody>
     </table>
 
+    {{-- pagination links --}}
     <div class="mt-6 pt-4">
         {{ $resorts->links() }}
     </div>
+
 </x-admin_layout>
