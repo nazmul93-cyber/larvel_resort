@@ -15,7 +15,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         \App\Models\User::factory(5)->create();
-        Resort::factory(100)->create();
+        Resort::factory()
+        ->count(100)
+        ->hasBookings(3)
+        ->create();
        
     }
 }

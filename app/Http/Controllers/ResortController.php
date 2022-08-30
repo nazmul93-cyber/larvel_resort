@@ -45,9 +45,9 @@ class ResortController extends Controller
             'email' => ['required', 'email', Rule::unique('resorts', 'email')],
             'available_from' => ['required', 'date'],
             'available_till' => ['required', 'date'],
-            'room_numbers' => ['required', 'numeric'],
-            'room_price' => ['required', 'numeric'],
-            'room_capacity' => ['required', 'numeric'],
+            'room_numbers' => ['required', 'numeric', 'min:0'],
+            'room_price' => ['required', 'numeric', 'min:500'],
+            'room_capacity' => ['required', 'numeric', 'min:1'],
         ]);
 
         // store image functionality 

@@ -1,5 +1,7 @@
-<x-admin_layout>
-    <a href="/resorts" class="btn btn-info"><i class="fa-solid fa-arrow-left"></i> Back
+<x-layout>
+    <x-slot name="search_slot"></x-slot>
+    
+    <a href="/" class="btn btn-info"><i class="fa-solid fa-arrow-left"></i> Back
     </a>
     <div class="mx-6">
         <div class="p-12 mx-4">
@@ -47,16 +49,10 @@
             </div>
         </div>
 
-        <div class="d-flex ">
-            <a class="mx-3 btn btn-info" href="/resorts/{{ $resort->id }}/edit">
-                <i class="fa-solid fa-pencil mr-1"></i>Edit
+        <div class="text-center my-4">
+            <a class="mx-3 btn btn-info" href="/{{ $resort->id }}/booking">
+                <i class="fa-solid fa-paper-plane mr-1"></i>Booking
             </a>
-
-            <form onsubmit="return confirm('Are you sure?');" method="POST" action="/resorts/{{ $resort->id }}">
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-danger"><i class="fa-solid fa-trash mr-1"></i>Delete</button>
-            </form>
         </div>
     </div>
-</x-admin_layout>
+</x-layout>

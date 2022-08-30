@@ -16,9 +16,9 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('resort_id')->constrained()->cascadeOnDelete();
-            $table->dateTime('check_in');
-            $table->dateTime('check_out');
-            $table->integer('room_numbers');
+            $table->date('check_in');
+            $table->date('check_out');
+            // $table->integer('room_numbers');
             $table->integer('room_no');
             $table->string('visitor_email');
             $table->integer('visitor_numbers');

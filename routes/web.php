@@ -3,9 +3,13 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ResortController;
 use App\Http\Controllers\UserController;
+use App\Jobs\BookingMailJob;
+use App\Models\Booking;
+use App\Models\Resort;
 use App\Models\User;
 use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
+use PharIo\Manifest\Email;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,10 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// general access
-Route::get('/', function () {
-    return view('home');
-});
+
 
 
 // guest access
@@ -53,3 +54,63 @@ Route::post('/bookings/store', [BookingController::class, 'store'])->middleware(
 Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->middleware('auth');
 Route::put('/bookings/{booking}', [BookingController::class, 'update'])->middleware('auth');
 Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->middleware('auth');
+Route::get('/bookings/{booking}', [BookingController::class, 'show'])->middleware('auth');     // show single booking 
+
+
+// general access
+Route::get('/', function () {
+    $resorts = Resort::query()
+        ->filter(request('tags'))
+        ->search(request('search'))
+        ->paginate();
+    return view('frontend.home', ['resorts' => $resorts]);
+});
+
+Route::get('/{resort}', function (Resort $resort) {
+    return view('frontend.show', ['resort' => $resort]);
+});
+
+Route::get('/{resort}/booking', function (Resort $resort) {
+    return view('frontend.booking', ['resort' => $resort]);
+});
+
+Route::post('/{resort}/booking', function (Resort $resort) {
+    $formFields = request()->validate([
+        'check_in' => ['required', 'date'],
+        'check_out' => ['required', 'date'],
+        'room_no' => ['required', 'numeric'],
+        'visitor_email' => ['required', 'email'],
+        'visitor_numbers' => ['required', 'numeric', 'min:1'],
+        'bill' => 'required',
+    ]);
+    $formFields['resort_id'] = $resort->id;
+
+    // check check In is available for this resort
+    $checkInDate = date('Y-m-d', strtotime($formFields['check_in']));
+    $startDate = date('Y-m-d', strtotime($resort->available_from));
+    $endDate = date('Y-m-d', strtotime($resort->available_till));
+    if (($checkInDate >= $startDate) && ($checkInDate <= $endDate)) {
+        $booking = Booking::create($formFields);
+
+
+        // send email on successful booking
+        $email_data = [
+            'email' => "najimmycuet12@gmail.com",
+            'to_email' => $booking->visitor_email,
+            'subject' => "Booking Successful",
+            'message' => $booking,
+        ];
+
+        dispatch(new BookingMailJob($email_data));
+        dd('email sent');
+        return redirect('/')->with('message', 'Congratulations! Successfully Booked Resort');
+    } else {
+        return redirect('/')->with('message', 'Sorry! This resort is not available at your check in time');
+    }
+});
+
+
+// mail route
+// Route::get('/booking-complete', function() {
+
+// });
