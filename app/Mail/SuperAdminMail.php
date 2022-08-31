@@ -7,21 +7,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class BookingMail extends Mailable
+class SuperAdminMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     private $data; 
     /**
      * Create a new message instance.
-     *
+     * 
      * @return void
      */
     public function __construct($data)
     {
         $this->data = $data; 
     }
- 
+
     /**
      * Build the message.
      *
@@ -29,9 +29,8 @@ class BookingMail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.booking')
-            ->replyTo($this->data['email'])
-            ->subject($this->data['subject'])
-            ->with('data', $this->data);
+        return $this->view('emails.super_admin')
+        ->subject($this->data['subject'])
+        ->with('data', $this->data);
     }
 }

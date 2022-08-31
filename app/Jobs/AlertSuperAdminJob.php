@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Mail\BookingMail;
 use App\Mail\SuperAdminMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,12 +11,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class BookingMailJob implements ShouldQueue
+class AlertSuperAdminJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $details; 
-
     /**
      * Create a new job instance.
      *
@@ -35,9 +33,7 @@ class BookingMailJob implements ShouldQueue
      */
     public function handle()
     {
-        $email_data = $this->details;
-
-        Mail::to($email_data['to_email'])
-        ->send(new BookingMail($this->details));
+        Mail::to(env('SUPER_ADMIN_MAIL'))
+        ->send(new SuperAdminMail($this->details));
     }
 }
